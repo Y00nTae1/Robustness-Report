@@ -1,0 +1,15 @@
+# S1 환경 부팅(sim/boot.py) 검증에 사용한 의존성 — 외부 라이브러리 3종 한정
+# 실제 실행·통과(S1 BOOT: PASS) 시점의 고정 버전.
+mujoco==3.10.0
+numpy==2.5.0
+opencv-python==4.13.0
+
+# --- 재현 환경 메모 ---
+# OS            : Windows 11 (Python 3.13)
+# 렌더 백엔드   : MUJOCO_GL 미설정(Windows 기본 wgl) — 정상 렌더 확인
+# 모델          : MuJoCo Menagerie franka_emika_panda/scene.xml
+# Menagerie 커밋: accb6df40a9a1d1e49eff88157f6818b63a49335
+# 실행          : set PANDA_XML=...\franka_emika_panda\scene.xml && python sim\boot.py
+# 비고          : 모델/출력 경로에 비ASCII(한글)가 있어도 동작하도록
+#                 - 모델 로드는 디렉터리 chdir 후 ASCII 파일명으로 from_xml_path
+#                 - 이미지 저장은 cv2.imencode + 파이썬 파일 IO 사용

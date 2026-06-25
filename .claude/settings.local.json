@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(python --version)",
+      "PowerShell(python -c \"import mujoco, numpy, cv2; print\\('mujoco', mujoco.__version__\\); print\\('numpy', numpy.__version__\\); print\\('cv2', cv2.__version__\\)\" 2>&1)",
+      "PowerShell(& \"C:\\\\Users\\\\�¿�\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" -c \"import mujoco, numpy; print\\('mujoco', mujoco.__version__\\); print\\('numpy', numpy.__version__\\)\" 2>&1)",
+      "PowerShell(& \"C:\\\\Users\\\\�¿�\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" -c \"import cv2; print\\('cv2', cv2.__version__\\)\" 2>&1)",
+      "PowerShell(& \"C:\\\\Users\\\\�¿�\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" -m pip install opencv-python --quiet 2>&1)",
+      "PowerShell(git clone --depth 1 https://github.com/google-deepmind/mujoco_menagerie \"C:\\\\Users\\\\�¿�\\\\R0B\\\\mujoco_menagerie\" 2>&1)",
+      "PowerShell(git -C \"C:\\\\Users\\\\�¿�\\\\R0B\\\\mujoco_menagerie\" rev-parse HEAD)",
+      "Read(//c/c/Users/태원/R0B/mujoco_menagerie/franka_emika_panda/**)",
+      "PowerShell(& \"C:\\\\Users\\\\�¿�\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\�¿�\\\\R0B\\\\external_module\\\\interface.py\" 2>&1)",
+      "PowerShell($env:PANDA_XML=\"C:\\\\Users\\\\태원\\\\R0B\\\\mujoco_menagerie\\\\franka_emika_panda\\\\scene.xml\"; & \"C:\\\\Users\\\\태원\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\태원\\\\R0B\\\\sim\\\\loop.py\" 2>&1)",
+      "PowerShell($env:PANDA_XML=\"C:\\\\Users\\\\태원\\\\R0B\\\\mujoco_menagerie\\\\franka_emika_panda\\\\scene.xml\"; & \"C:\\\\Users\\\\태원\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\태원\\\\R0B\\\\sim\\\\loop.py\" 2>&1 | Select-Object -First 3; echo \"...\"; & \"C:\\\\Users\\\\태원\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\태원\\\\R0B\\\\sim\\\\loop.py\" 2>&1 | Select-Object -Last 3)",
+      "PowerShell($env:PANDA_XML=\"C:\\\\Users\\\\태원\\\\R0B\\\\mujoco_menagerie\\\\franka_emika_panda\\\\scene.xml\"; & \"C:\\\\Users\\\\태원\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\태원\\\\R0B\\\\sim\\\\_scratch_s3.py\" 2>&1)",
+      "PowerShell(& \"C:\\\\Users\\\\�¿�\\\\R0B\\\\mujoco_env\\\\Scripts\\\\python.exe\" \"C:\\\\Users\\\\�¿�\\\\R0B\\\\report\\\\make_figures.py\" 2>&1)",
+      "Bash(ls -la report/)",
+      "Bash(ls -la report/figures/)",
+      "Bash(ls -la report/robustness_report_final.html)",
+      "Bash(cd \"/c/Users/태원/R0B\" && grep -nE '</style>|theme-toggle|class=\"toc\"|<aside|id=\"toc\"|<nav|scroll-top|back-to-top|class=\"container\"' report/robustness_report_final.html | head -30)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(du -sh report)",
+      "Bash(rm -f \"report/make_figures \\(1\\).py\" \"report/robustness_report_final \\(1\\).md\")",
+      "Bash(rm -f report/figures/video/frame_*.png)"
+    ]
+  }
+}

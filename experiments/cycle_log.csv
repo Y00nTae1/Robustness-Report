@@ -1,0 +1,5 @@
+stage,source,dx_mm,dy_mm,dtheta_deg
+before,measured,-8.203,5.428,-3.468
+before,ground_truth,-8.000,6.000,-3.000
+after,measured,0.120,-0.362,0.000
+after,ground_truth,0.082,-0.152,-0.105

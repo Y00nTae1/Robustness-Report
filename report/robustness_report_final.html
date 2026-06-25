@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>광학 부품 정밀 정렬 — 외란 강건성 검증 리포트</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    id="hljs-theme">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid.js for Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      securityLevel: 'loose',
+      flowchart: { useMaxWidth: true, htmlLabels: true }
+    });
+  </script>
+
+  <style>
+    /* CSS Variables for Premium Themes */
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+
+      --accent: #06b6d4;
+      --accent-hover: #22d3ee;
+      --accent-light: rgba(6, 182, 212, 0.1);
+
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.15);
+      --warning: #f59e0b;
+      --warning-light: rgba(245, 158, 11, 0.15);
+      --danger: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.15);
+
+      --border-color: #334155;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --glass-blur: blur(12px);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --border-radius: 12px;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f1f5f9;
+
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+
+      --accent: #0284c7;
+      --accent-hover: #0369a1;
+      --accent-light: rgba(2, 132, 199, 0.1);
+
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.1);
+      --warning: #d97706;
+      --warning-light: rgba(217, 119, 6, 0.1);
+      --danger: #dc2626;
+      --danger-light: rgba(220, 38, 38, 0.1);
+
+      --border-color: #e2e8f0;
+      --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      transition: var(--transition);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      line-height: 1.2;
+      background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      margin-top: 2.5rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      color: var(--accent);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    p {
+      margin-bottom: 1.2rem;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+    }
+
+    strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    ul,
+    ol {
+      margin-bottom: 1.2rem;
+      padding-left: 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    /* Layout Wrapper */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+      max-width: 1600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 320px;
+      padding: 2.5rem 1.5rem;
+      border-right: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background-color: var(--bg-secondary);
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .sidebar-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toc-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .toc-item {
+      margin-bottom: 0.3rem;
+    }
+
+    .toc-link {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      color: var(--text-muted);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toc-link:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-tertiary);
+      text-decoration: none;
+    }
+
+    .toc-link.active {
+      color: var(--bg-primary);
+      background-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Main Content Area */
+    .content-area {
+      flex: 1;
+      padding: 3rem 4rem;
+      max-width: 1050px;
+      overflow-x: hidden;
+    }
+
+    /* Top Utility Bar */
+    .utility-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .theme-toggle-btn {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .theme-toggle-btn:hover {
+      background-color: var(--bg-secondary);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Callout & Alert Blocks */
+    .callout {
+      background-color: var(--bg-secondary);
+      border-left: 4px solid var(--accent);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      margin: 1.5rem 0;
+      box-shadow: var(--card-shadow);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout.warning {
+      border-left-color: var(--warning);
+      background-color: var(--warning-light);
+    }
+
+    .callout.warning .callout-title {
+      color: var(--warning);
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+      background-color: var(--danger-light);
+    }
+
+    .callout.danger .callout-title {
+      color: var(--danger);
+    }
+
+    /* Stats Grid (Dashboard style) */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .stat-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background-color: var(--accent);
+    }
+
+    .stat-card.warning::before {
+      background-color: var(--warning);
+    }
+
+    .stat-card.danger::before {
+      background-color: var(--danger);
+    }
+
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text-primary);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* Tables styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0 2.5rem 0;
+      font-size: 0.95rem;
+      box-shadow: var(--card-shadow);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--bg-secondary);
+      color: var(--accent);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+    }
+
+    tr {
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      transition: var(--transition);
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.015);
+    }
+
+    [data-theme="light"] tr:nth-child(even) {
+      background-color: var(--bg-primary);
+    }
+
+    tr:hover {
+      background-color: var(--accent-light);
+    }
+
+    /* Highlighting false convergence rows specifically */
+    tr.alert-row {
+      background-color: var(--danger-light);
+    }
+
+    tr.warning-row {
+      background-color: var(--warning-light);
+    }
+
+    /* Code Block Customizations */
+    pre {
+      margin: 1.5rem 0;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
+    }
+
+    code {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 0.9rem;
+    }
+
+    p code,
+    li code {
+      background-color: var(--bg-secondary);
+      color: var(--accent);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Figure / Image boxes */
+    .figure-container {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .figure-container:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .figure-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      background-color: #ffffff;
+      /* ensure white background for figures with text */
+    }
+
+    .figure-caption {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-style: italic;
+      display: block;
+    }
+
+    /* Mermaid diagrams custom wrap */
+    .mermaid-container {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      justify-content: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-primary {
+      background-color: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .badge-success {
+      background-color: var(--success-light);
+      color: var(--success);
+    }
+
+    .badge-warning {
+      background-color: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .badge-danger {
+      background-color: var(--danger-light);
+      color: var(--danger);
+    }
+
+    /* Divider line */
+    hr {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border-color), transparent);
+      margin: 3rem 0;
+    }
+
+    /* Back to top float */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background-color: var(--accent);
+      color: var(--bg-primary);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-3px);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .app-container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.5rem;
+      }
+
+      .content-area {
+        padding: 2rem;
+      }
+    }
+
+    /* ============ 인쇄 / PDF (라이트 테마 강제 + 페이지 분할 보호) ============ */
+    @media print {
+      /* 토글 상태와 무관하게 라이트 팔레트 강제 */
+      :root,
+      [data-theme],
+      [data-theme="light"] {
+        --bg-primary: #ffffff;
+        --bg-secondary: #ffffff;
+        --bg-tertiary: #f1f5f9;
+        --text-primary: #000000;
+        --text-secondary: #1a1a1a;
+        --text-muted: #555555;
+        --accent: #0369a1;
+        --border-color: #cccccc;
+        --card-shadow: none;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        line-height: 1.5;
+      }
+
+      /* 화면 전용 UI 숨김 */
+      .sidebar,
+      .utility-bar,
+      .theme-toggle-btn,
+      .back-to-top,
+      #backToTop {
+        display: none !important;
+      }
+
+      .app-container {
+        display: block !important;
+      }
+
+      .content-area {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      /* 그림자·블러·그라디언트 텍스트 제거(인쇄 시 사라짐 방지) */
+      * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+      }
+
+      h1 {
+        background: none !important;
+        -webkit-text-fill-color: #000000 !important;
+        color: #000000 !important;
+      }
+
+      h2,
+      h3,
+      h4 {
+        color: #000000 !important;
+        page-break-after: avoid;
+      }
+
+      /* 페이지 경계에서 그래프·표·코드·다이어그램이 잘리지 않도록 */
+      img,
+      .figure-image {
+        max-width: 100% !important;
+        height: auto !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      figure,
+      .figure-container,
+      .mermaid-container,
+      .mermaid,
+      pre,
+      table,
+      .stat-card,
+      .card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .mermaid-container {
+        background: #ffffff !important;
+      }
+
+      table,
+      pre {
+        border: 1px solid #cccccc !important;
+      }
+
+      thead {
+        display: table-header-group;
+      }
+
+      tr,
+      td,
+      th {
+        page-break-inside: avoid;
+      }
+
+      a {
+        color: #000000 !important;
+        text-decoration: underline;
+      }
+
+      @page {
+        margin: 14mm;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <!-- Sidebar / Table of Contents -->
+    <aside class="sidebar">
+      <div class="sidebar-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <span>Robustness Report</span>
+      </div>
+      <nav>
+        <ul class="toc-list">
+          <li class="toc-item"><a href="#section-title" class="toc-link">광학 부품 정밀 정렬</a></li>
+          <li class="toc-item"><a href="#summary" class="toc-link">0. 한눈에 보기 (Summary)</a></li>
+          <li class="toc-item"><a href="#interview-qa" class="toc-link">1. 연구 기획 배경 (Q&A)</a></li>
+          <li class="toc-item"><a href="#flowchart" class="toc-link">2. 프로그램 구조 (Flowchart)</a></li>
+          <li class="toc-item"><a href="#robot-model" class="toc-link">3. 로봇 모델 및 End-Effector</a></li>
+          <li class="toc-item"><a href="#procedure" class="toc-link">4. 작업 수행 절차</a></li>
+          <li class="toc-item"><a href="#external-module" class="toc-link">5. 외부 모듈 및 보정 원리</a></li>
+          <li class="toc-item"><a href="#pipeline-stages" class="toc-link">6. 단계별(S1~S7) 상세 구현</a></li>
+          <li class="toc-item"><a href="#results" class="toc-link">7. 결과 및 한계 분석</a></li>
+          <li class="toc-item"><a href="#conclusion" class="toc-link">8. 결론</a></li>
+          <li class="toc-item"><a href="#appendix" class="toc-link">부록: 저장소 구조 및 실행</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+
+      <!-- Top Utility bar (Theme toggle) -->
+      <div class="utility-bar">
+        <button id="themeToggle" class="theme-toggle-btn" title="테마 변경">
+          <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Moon icon (default in dark mode) -->
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <header id="section-title">
+        <h1>광학 부품 정밀 정렬 — 외란 강건성 검증 리포트</h1>
+        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+          <strong>과제 트랙:</strong> 로봇 시뮬레이션·자동화 (사용자 개발 외부 모듈을 활용한 로봇팔 응용 시뮬레이션)
+        </p>
+        <p style="font-size: 1.1rem; color: var(--text-muted);">
+          <strong>시뮬레이터:</strong> MuJoCo 3.10 &nbsp;|&nbsp;
+          <strong>로봇:</strong> Franka Emika Panda (7축) &nbsp;|&nbsp;
+          <strong>외부 모듈:</strong> Computer Vision 기반 좌표 검출, 보정 루프 (직접 구현)
+        </p>
+        <p style="font-size: 0.95rem; color: var(--text-muted); font-style: italic;">
+          <strong>데이터 근거:</strong> experiments/results.csv (전 격자 160 trials) 조건별 집계
+        </p>
+      </header>
+
+      <hr>
+
+      <!-- Section 0. Summary -->
+      <section id="summary">
+        <h2>0. 한눈에 보기 (Executive Summary)</h2>
+        <p>로봇팔이 광학 부품을 목표 위치에 정밀 정렬하는 작업을, <strong>외부 비전 보정 폐루프</strong>(측정 → 편차 → 보정 → 재측정)로 구현하고, 현실에서 발생하는 세 가지
+          외란(조명·노이즈·좌표 드리프트)에 대한 강건성을 정량 측정했다.</p>
+
+        <p>핵심 결과는 두 가지다.</p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">26배</div>
+            <div class="stat-label">오차 감소 효과</div>
+            <div class="stat-desc">보정 OFF시 9.84 mm의 잔류 오차를 ON시 0.38 mm로 흡수(성공률 0% → 100%).</div>
+          </div>
+          <div class="stat-card danger">
+            <div class="stat-value">11.62 mm</div>
+            <div class="stat-label">최대 실제 오차 (D3)</div>
+            <div class="stat-desc">D3(드리프트) 강 조건에서 측정상 0.30 mm 수렴했으나 실제 오차는 11.62 mm로 벌어짐.</div>
+          </div>
+        </div>
+
+        <div class="callout danger">
+          <div class="callout-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            핵심 위험 요소: False-Convergence (거짓 수렴)
+          </div>
+          <p>외란이 강해지면 비전이 측정한 잔류 오차(시스템이 보는 값)는 여전히 허용범위 안에 머물지만, 실제 잔류 오차(Ground-Truth)는 심각하게 늘어날 수 있다. 좌표 드리프트(D3) strong(강) 조건에서 <strong>측정 성공률은 100%이나 실제 성공률은 12.5%</strong>에 불과하다. 비전 자기 측정만 신뢰할 때 발생하는 신뢰성 리스크로, 정밀 조립 공정에서
+            중대한 불량 유발 요인이 된다.</p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            SRS 허용오차 기준
+          </div>
+          <p>위치 <strong>±0.5 mm</strong> / 각도 <strong>±2.0°</strong>, 상단 카메라(1280×960) GSD <strong>1.4475
+              mm/px</strong>. 이 기준의 구체적인 도출 근거는 §7.2 에 상술한다.</p>
+        </div>
+      </section>
+
+      <!-- Section 1. Interview Q&A -->
+      <section id="interview-qa">
+        <h2>1. 연구 기획 배경 및 산업적 의의</h2>
+        <p>본 정밀 조립 검사 자동화 프로젝트가 해결하려는 현장의 문제점(Pain Point)과 비전 중심의 해결 구조를 면접 질문 시나리오 형식으로 정리했습니다.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin: 1.5rem 0;">
+          <div class="stat-card" style="padding: 1.75rem;">
+            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--accent);">
+              <span class="badge badge-primary">Q1</span> 무엇을 만드는가 (What)?
+            </h3>
+            <p
+              style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary); border-left: 3px solid var(--accent); padding-left: 0.75rem; margin: 0.75rem 0;">
+              "로봇팔이 광학 부품을 집어 조립 위치로 옮길 때, 외부 비전 모듈이 '얼마나 틀어졌는지'를 숫자로 측정해 로봇을 보정하고, 마지막에 양품/불량을 판정하는 검사·정렬 자동화 셀입니다."
+            </p>
+            <p style="margin-bottom: 0;">
+              <strong>시뮬레이터(MuJoCo) 영역(손):</strong> 7축 Franka Emika Panda 로봇팔이 부품을 물리적으로 집어 조립 장소로 이송하며 카메라로 씬을 촬영하는 현실
+              공장 축소 모형입니다.<br />
+              <strong>외부 비전 모듈 영역(눈과 판단):</strong> 이미지와 Depth 맵을 수신하여 픽셀 오차 및 X/Y/θ 단위 실제 편차를 산출하고 보정량을 적용하며 조립 허용 범위 내 안착 여부를 판정하는 인지/제어 모듈입니다.
+            </p>
+          </div>
+
+          <div class="stat-card" style="padding: 1.75rem;">
+            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--accent);">
+              <span class="badge badge-primary">Q2</span> 왜 이 주제를 선택했는가 (Why)?
+            </h3>
+            <p style="margin-top: 0.75rem; margin-bottom: 0;">
+              과제의 평가 요건(시뮬레이터-외부 모듈 간 JSON 규약 및 연동), 저의 강점(Vision AI 기반 자세 추정 및 피드백 루프 설계 경험), 그리고 1주일의 한정된 개발 기간을 고려해 기획했습니다. 정렬 오차를 단순 합격/불합격이 아닌 <strong>실제 수치(X/Y/θ)로 정량화하여 보정 효과를 입증</strong>함으로써 엔지니어링 깊이를 보여 줍니다.
+            </p>
+          </div>
+
+          <div class="stat-card" style="padding: 1.75rem; border: 1px solid var(--accent);">
+            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--accent);">
+              <span class="badge badge-primary">Q3</span> 이게 회사에 어떤 도움이 되는가?
+            </h3>
+            <p style="margin-top: 0.75rem;">
+              SpaceLAB 팀의 핵심 미션인 <strong>"광학 탑재체 조립·정렬·검사 공정의 로봇+비전 자동화"</strong>를 그대로 축약한 시나리오입니다. 우주용 광학 부품은 미세 정렬 오차가 곧 광축 오정렬 및 탑재체 임무 실패로 이어집니다. 본 연구에서 다룬 <strong>"편차 정밀 계측 → 피드백 보정 → 합격/불합격 판정"</strong>의 자동화 루프 및 외란 조건에서의 거짓 수렴(False-Convergence) 정량 분석 결과는 실제 공정 설계에 직접 적용할 수 있는 구조입니다.
+            </p>
+            <div class="callout warning" style="margin: 0.5rem 0 0 0; padding: 1rem; border-radius: 6px;">
+              <div class="callout-title" style="margin-bottom: 0.25rem; font-weight: 700;">Main Point</div>
+              <p style="margin-bottom: 0; font-size: 0.95rem; font-style: italic;">
+                "SpaceLAB이 해결하고 있는 '정렬 오차가 광축 실패로 직결되는 검사 자동화' 공정의 특성을 고려하여, 정렬 편차를 mm·deg 단위로 정밀 측정하고 보정하는 구조 설계에 집중했습니다.
+                이 구조는 실제 우주용 탑재체 정렬 공정에도 바로 적용 가능한 아키텍처입니다."
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2. Flowchart -->
+      <section id="flowchart">
+        <h2>2. 프로그램 구조 (Flowchart)</h2>
+        <p>전체 시스템은 <strong>로봇 시뮬레이터(MuJoCo)</strong>와 <strong>외부 비전 모듈(독립 Python)</strong>의 두 프로세스로 분리되며, JSON 메시지로
+          통신한다. 시뮬레이터가 외란이 적용된 이미지를 보내면, 외부 모듈이 부품의 자세를 추정하고 보정 명령을 되돌린다. 이 폐루프가 허용오차 진입 또는 보정 상한(10회)에서 종료한다.</p>
+
+        <div class="mermaid-container">
+          <div class="mermaid">
+            flowchart TD
+            A["boot.py<br />모델 로드 · home 자세 · 상단 카메라 · 렌더러"] --> B["scene_parts.py<br />ArUco 부품 mocap 배치"]
+            B --> C["run_cycle.py<br />PICK → TRANSPORT → ALIGN → PLACE"]
+            C --> D{"ALIGN 보정 폐루프"}
+            D -->|"RGB+depth 렌더"| E["disturbance.py<br />D1 조명 / D2 노이즈 / D3 드리프트 주입"]
+            E -->|"외란 적용 이미지"| F["interface.py<br />JSON 요청/응답 (코덱)"]
+            F --> G["m1_pose.py<br />ArUco 검출 → pose 추정"]
+            G --> H["m2_align.py<br />편차(Δx,Δy,Δθ) → 보정 벡터"]
+            H -->|"보정 명령"| D
+            D -->|"허용오차 ±0.5mm/±2° 진입<br />또는 상한 10회"| I["run_experiment.py<br />KPI 4종 CSV 누적"]
+            I --> J["make_figures.py<br />CSV 집계 → 그래프 + 리포트"]
+          </div>
+        </div>
+
+        <p><strong>파이프라인 단계:</strong> 부팅(S1) → JSON 배관(S2) → 비전 모듈 M1/M2(S3) → 보정 폐루프(S4) → 외란 주입(S5) → 실험·로깅(S6) → 결과
+          분석·리포트(S7).</p>
+        <p><strong>분리 구조의 핵심:</strong> 시뮬레이터(<code>/sim</code>)와 외부 비전 모듈(<code>/external_module</code>)은 파일·프로세스로 완벽히
+          분리되어 있으며, 상호 작용은 오직 <code>interface.py</code>의 JSON 규약을 통해서만 이루어진다. 이는 향후 물리 하드웨어 도입 및 이기종 시스템 결합으로의 전환을 극도로
+          용이하게 한다.</p>
+      </section>
+
+      <!-- Section 3. Robot & EE -->
+      <section id="robot-model">
+        <h2>3. 로봇 모델 및 End-Effector</h2>
+
+        <h3>3.1 로봇 모델: Franka Emika Panda</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">항목</th>
+              <th>내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>모델</strong></td>
+              <td>Franka Emika Panda, 7-DOF (MuJoCo Menagerie 공식 모델, <strong>무수정 로드</strong>)</td>
+            </tr>
+            <tr>
+              <td><strong>선택 이유</strong></td>
+              <td>공식 MJCF 제공으로 구조 안정성과 재현성을 담보하며, 광학 부품 조립과 같은 고정밀 연구의 글로벌 산업계 레퍼런스 규격</td>
+            </tr>
+            <tr>
+              <td><strong>자유도</strong></td>
+              <td>nq = 9 (팔 7축 + 그리퍼 손가락 2축), 액추에이터 nu = 8</td>
+            </tr>
+            <tr>
+              <td><strong>카메라</strong></td>
+              <td>기본 모델 내 ncam=0 (씬에 사전정의된 카메라 없음) → 코드에서 상단 top-down free camera(elevation = −90°)로 동적 생성 및 위치 정의</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>3.2 End-Effector: 2지 평행 그리퍼</h3>
+        <ul>
+          <li>액추에이터 <code>actuator8</code> (tendon <code>split</code> 제어), 구동 범위 <code>0~255</code> (<strong>0 = 완전 닫힘 /
+              255 = 완전 열림</strong>).</li>
+          <li>손가락 관절 <code>finger_joint1</code>, <code>finger_joint2</code> (두 관절의 양방향 합이 그리퍼 전체 개도에 해당, 최대 개도 약 0.08
+            m).</li>
+          <li><code>home</code> 키프레임 위치 유지로 제어기 입력이 없을 시 중력에 의해 로봇 팔이 아래로 붕괴하는 현상을 완전 차단 (S1 시뮬레이션 구축 시 팔 처짐 방지를 통해 카메라
+            왜곡 배제 확인).</li>
+        </ul>
+
+        <h3>3.3 End-Effector 동작</h3>
+        <ol>
+          <li><strong>집기(PICK):</strong> home 자세에서 그리퍼 폐합 동작 수행 (이송 대상과의 연결 관계 설정).</li>
+          <li><strong>이송(TRANSPORT):</strong> 대상을 목표 영역 부근으로 이동 (시뮬레이터 수준에서 오정렬 오프셋 자동 인가).</li>
+          <li><strong>정렬·배치(ALIGN → PLACE):</strong> 비전 제어로 오차를 감쇄시킨 후, SRS 오차 범위에 도달하는 순간 그리퍼를 개방(개도 1.0)하여 마운트에 안착.
+          </li>
+        </ol>
+
+        <div class="callout warning">
+          <div class="callout-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4"></path>
+              <path d="M12 16h.01"></path>
+            </svg>
+            설계 결정: 부품 파지의 mocap 추상화
+          </div>
+          <p>정밀 정렬 및 비전 보정 루프의 외란 강건성에만 집중하기 위해, 복잡한 접촉 마찰력과 부품 미끄러짐 동역학은 mocap(Motion Capture Body) 텔레포트 방식으로 추상화했다. 로봇 엔드이펙터(Panda Gripper)는 개폐 모션으로 동작을 시뮬레이션하며, 정밀 정렬을 위한 이동 명령은 비전 피드백을 통해 계산된다.</p>
+        </div>
+      </section>
+
+      <!-- Section 4. Procedure -->
+      <section id="procedure">
+        <h2>4. 작업 수행 절차</h2>
+        <p>전체 정렬 시퀀스는 다음과 같이 설계된 상태 기계에 의해 제어된다.</p>
+
+        <ol>
+          <li><strong>초기화:</strong> MuJoCo 시뮬레이션 환경 구성, ArUco 마커가 부착된 물리 부품 로드, 카메라 및 렌더러 정의.</li>
+          <li><strong>외란 주입:</strong> 대상 시도에 사전 정의된 외란 유형(D1/D2/D3) 및 강도(weak/med/strong)를 렌더러 파이프라인 혹은 센서 데이터에 합성.</li>
+          <li><strong>이미지 캡처:</strong> top-down 카메라로 1280×960 고해상도 RGB 프레임 및 Depth 프레임 캡처.</li>
+          <li><strong>자세 추정(M1):</strong> 외부 모듈 내에서 1차 ArUco 마커 검출 및 실패 시 2차 컨투어 검출을 이용해 부품의 픽셀 좌표와 각도 추정.</li>
+          <li><strong>편차 계산(M2):</strong> 추정된 자세와 목표 자세의 오차를 계산하고, 비례 제어(proportional control) 이득을 바탕으로 보정 명령 생성.</li>
+          <li><strong>보정 이동:</strong> 시뮬레이터에 생성된 보정량을 인가하여 부품의 실제 자세 이동.</li>
+          <li><strong>허용오차 판정:</strong> 재촬영하여 오차 크기 계산 후, SRS 임계조건(±0.5 mm / ±2.0°) 만족 시 루프 탈출 및 그리퍼 개방.</li>
+          <li><strong>기록:</strong> 측정된 잔류오차와 실제(Ground-Truth) 오차, 소요 시간, 수렴 사이클 수를 CSV 파일에 누적 기록.</li>
+        </ol>
+      </section>
+
+      <!-- Section 5. External Module -->
+      <section id="external-module">
+        <h2>5. 외부 모듈: 선택 이유 · 동작 방식 · 연동 인터페이스</h2>
+
+        <h3>5.1 외부 모듈을 선택한 이유</h3>
+        <ul>
+          <li><strong>현업 지향성:</strong> 비전 기반 정렬 및 계측 알고리즘을 물리 시뮬레이션 커널과 원천 분리함으로써 실물 하드웨어 이식성과 모듈 단위 테스트 가용성 극대화.</li>
+          <li><strong>외란 보상 주체:</strong> 노이즈 및 외란 환경에서 피드백 제어로 오차를 감쇄시키는 핵심 제어 엔진 역할을 수행하여 보정의 당위성을 직접 증명.</li>
+        </ul>
+
+        <h3>5.2 모듈 동작 방식</h3>
+        <p><strong>M1 — 자세 추정 (<code>m1_pose.py</code>)</strong></p>
+        <ul>
+          <li><strong>1차 검출:</strong> ArUco 마커 검출 (<code>DICT_4X4_50</code>)을 사용하여 코너 포인트 4개의 원근 기하 매핑을 기반으로 위치 및 회전각을
+            강력히 추정.</li>
+          <li><strong>보조 검출:</strong> 조명 유실 등으로 마커 검출 실패 시, 이진화 및 컨투어 외곽선 검출을 통해 물체의 질량 중심(Centroid)과 타원 피팅 각도 추출.</li>
+          <li><strong>픽셀-미터 캘리브레이션:</strong> 2점 기준점 캘리브레이션을 이용해 GSD 1.4475 mm/px 기반의 비선형 왜곡 없는 선형 변환 수행.</li>
+        </ul>
+
+        <p><strong>M2 — 편차 계산 및 보정 (<code>m2_align.py</code>)</strong></p>
+        <p>추정된 물체 Pose와 Target Pose의 편차를 구하고 부품을 target 방향으로 정렬시키기 위한 보정 벡터를 출력한다.</p>
+
+        <h3>5.3 보정 폐루프의 동작 원리 (Proportional Control)</h3>
+        <p>이 시스템의 정렬은 단발 보정이 아니라 <strong>측정 → 편차 → 보정 → 재측정을 반복하는 폐루프</strong>다. 보정 알고리즘의 핵심은 비례 제어(proportional
+          control)이며, <code>m2_align.py</code>의 두 줄이 전부다.</p>
+
+        <pre><code class="language-python">error      = target - estimated        # 목표와 현재 추정 자세의 차이
+correction = gain * error              # 그 차이에 비례하는 보정량 (gain = 0.6)</code></pre>
+
+        <div class="figure-container">
+          <img src="proportional_correction_loop_mechanism.png" class="figure-image" alt="보정 폐루프 제어 메커니즘"
+            onerror="if(!this.src.includes('figures/')) this.src='figures/'+this.getAttribute('src');">
+          <span class="figure-caption">그림 1: 비례 제어(Proportional Control) 기반 보정 피드백 폐루프 메커니즘</span>
+        </div>
+
+        <p>새 부품 자세 = 현재 자세 + correction 으로 적용하면, 다음 사이클의 오차는 이전 오차의 <code>(1 - gain)</code>배로 줄어든다. 즉 <strong>매 사이클마다
+            오차가 일정 비율로 작아지는 기하급수적 수렴</strong>이다. gain = 0.6이면 한 번 보정할 때마다 오차의 40%만 남는다.</p>
+
+        <p><strong>보정 1회당 개선 과정 (k번째 사이클의 오차):</strong></p>
+        <table>
+          <thead>
+            <tr>
+              <th>사이클 k</th>
+              <th>측정 오차 (mm)</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0 (보정 전)</td>
+              <td>9.84</td>
+              <td>초기 배치 오차</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>3.94</td>
+              <td>9.84 × 0.4</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>1.57</td>
+              <td>3.94 × 0.4</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0.63</td>
+              <td>아직 허용오차 초과</td>
+            </tr>
+            <tr class="warning-row">
+              <td><strong>4</strong></td>
+              <td><strong>0.25</strong></td>
+              <td><strong>±0.5 mm 진입 → 수렴 완료</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="figure-container">
+          <img src="G5_convergence.png" class="figure-image" alt="보정 수렴 곡선"
+            onerror="if(!this.src.includes('figures/')) this.src='figures/'+this.getAttribute('src');">
+          <span class="figure-caption">그림 2: 보정 루프의 게인(Gain)별 수렴 속도 및 D3 외란 하의 측정 오차와 실제 오차 괴리 곡선</span>
+        </div>
+
+        <p>위 그래프의 왼쪽은 gain에 따른 수렴 속도다. gain이 클수록 적은 사이클로 허용오차에 진입하지만, 너무 크면 측정 노이즈에 과민반응할 수 있어 본 구현은 안정적인 0.6을 채택했다.</p>
+        <p><strong>가장 중요한 것은 오른쪽 그래프다.</strong> 이것이 false-convergence의 메커니즘을 보여준다. D3(좌표 드리프트) 조건에서, <strong>측정 오차(파란
+            선)는 비례 제어로 정상적으로 0.30 mm까지 수렴</strong>한다 — 시스템은 "정렬 완료"를 선언한다. 그러나 <strong>실제 오차(빨간 선)는 11.6 mm에 그대로
+            머문다.</strong> 이유는 보정 알고리즘 자체에 있지 않다. <code>m1_pose.py</code>의 캘리브레이션 픽셀-미터 변환은 고정되어 있으나, 드리프트가 이 기준 자체를 서서히
+          왜곡하기 때문이다. 결국 시스템은 "어긋난 자"로 측정하여 0.30 mm까지 오차가 수렴했다고 판정하지만 실제로는 누적된 편차로 인해 어떠한 오차도 해소되지 않는 왜곡을 보인다.</p>
+
+        <h3>5.4 시뮬레이션과의 연동 인터페이스 (JSON 계약)</h3>
+        <p>시뮬레이터와 외부 모듈은 JSON 형태의 통신 메시지 규약을 통해 상태를 교환한다.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+          <div>
+            <p><strong>시뮬레이터 → 외부 모듈 (요청):</strong></p>
+            <pre><code class="language-json">{
+  "type": "perception_request",
+  "image": "<외란이 적용된 RGB 프레임, base64 PNG>",
+  "depth": "<depth 프레임, base64 npy>",
+  "target_pose": { 
+    "x": 0.40, "y": 0.45, "theta": 0.0 
+  },
+  "cycle": 3
+}</code></pre>
+          </div>
+          <div>
+            <p><strong>외부 모듈 → 시뮬레이터 (응답):</strong></p>
+            <pre><code class="language-json">{
+  "estimated_pose": { 
+    "x": 0.41, "y": 0.45, "theta": 0.0 
+  },
+  "error":      { "dx": -0.01, "dy": 0.00, "dtheta": 0.0 },
+  "correction": { "dx": -0.01, "dy": 0.00, "dtheta": 0.0 },
+  "within_tolerance": false
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6. Pipeline Stages -->
+      <section id="pipeline-stages">
+        <h2>6. 파이프라인 단계별(S1~S7) 상세 구현 내용 및 설계 의도</h2>
+        <p>본 프로젝트를 완성하기 위해 설계된 총 7단계 파이프라인의 엔지니어링 의도와 세부 구현 방법은 다음과 같다.</p>
+
+        <div class="callout">
+          <div class="callout-title">S1. Boot (시뮬레이터 시동 및 초기 설정)</div>
+          <p><strong>Why:</strong> MuJoCo 시뮬레이션 환경을 구동하고 Panda 로봇 모델을 완벽히 로드하며, 중력 가속도로 인해 제어기가 가동되기 전 팔이 무너지는 구조적 왜곡을
+            미연에 방지하여 깨끗한 카메라 뷰를 획득하기 위함이다.</p>
+          <p><strong>How:</strong> <code>boot.py</code>를 통해 7축 Panda MJCF 공식 모델을 로드한 뒤, 물리 시동 시 <code>home</code> 키프레임
+            포즈를 관절 정보에 강제 주입 및 위치 제어 상태로 유지했다. ncam=0인 문제를 우회하기 위해 수직 top-down 카메라 뷰(elevation=-90°)를 배치하고, 1280x960의
+            고해상도 오프스크린 렌더러를 초기화했다.</p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">S2. Interface (JSON 통신 배관 및 dummy 검증)</div>
+          <p><strong>Why:</strong> 물리 시뮬레이션 프로그램과 인지 모듈을 프로세스 단위로 분리하여 결합도를 낮추고, 추후 분산 통신이나 실물 하드웨어 API 환경으로 전환 가능하도록
+            설계하는 것이다.</p>
+          <p><strong>How:</strong> <code>interface.py</code>를 설계하여 이미지 픽셀 정보(RGB PNG)는 base64 문자열 코덱으로, Depth 데이터는
+            numpy 직렬화를 통해 JSON 통신 메시지로 패킹했다. 비전 모듈 가동 이전에 통신 배관 자체의 무결성을 먼저 검증하기 위해 사이클 진행에 따라 오차가 0.6의
+            감쇄율(DECAY=0.6)로 기하급수적으로 수렴하는 Stateless Dummy Perception 로직을 구현하여 통신 신뢰성 검증을 통과(PASS)했다.</p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">S3. Vision (비전 검출 모듈 M1/M2 구현)</div>
+          <p><strong>Why:</strong> 시뮬레이터의 정보 주입 없이 오직 카메라 영상 데이터만을 이용하여 물리 평면 상의 부품 위치(x, y) 및 주 각도(theta)를 외부 컴퓨터 비전
+            모듈만으로 정밀 역추정해내기 위함이다.</p>
+          <p><strong>How:</strong> <code>m1_pose.py</code>에 ArUco 검출기(<code>DICT_4X4_50</code>)를 이식하여 특징점 4개의 코너 픽셀로부터
+            2점 캘리브레이션 및 GSD 1.4475 mm/px 기반의 선형 변환 식을 구현해 물리 공간 좌표를 획득했다. 조명(D1)이나 과도한 잡음(D2)에 의해 마커가 부분 훼손될 것에 대비하여,
+            OTSU 이진화 및 OpenCV 컨투어(Contour) 피팅으로 물체 중심과 타원 각도를 추출하는 보조 검출기(Backup Detector)를 추가하여 검출 성능을 크게 높였다. 검출 실패 시
+            <code>DetectionError</code> 예외를 호출자로 전파하며, <code>m2_align.py</code>에서 목표 포즈와의 오차(Δx, Δy, Δθ)를 계산하는 로직을 구현했다.</p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">S4. Loop (닫힌 피드백 제어 루프 연동 및 조립 완료)</div>
+          <p><strong>Why:</strong> 비전 검출에 노이즈와 왜곡이 섞이므로 단발성이 아닌 실시간 피드백 루프를 통해 수렴 시까지 오차를 기하급수적으로 상쇄시키고, 최종 정합 조건을 충족하는
+            순간 파지를 풀고 조립을 안착시키기 위함이다.</p>
+          <p><strong>How:</strong> <code>run_cycle.py</code> 및 <code>sim/loop.py</code>에서 비전 피드백 제어 루프를 가동했다. 렌더링된 RGB
+            이미지에서 검출한 `estimated_pose`와 목표치 간의 오차를 기반으로 비례 제어 명령(`correction = gain * error`, 기본 gain=0.6)을 적용해 부품의 실제
+            자세에 실시간 가산하여 이동시켰다. 측정 편차가 SRS 기준(위치 ±0.5 mm, 각도 ±2.0°)에 도달하면 상태 기계를 DONE으로 전이하고 그리퍼를 완전 개방(255)하도록 통합 구현했다.
+          </p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">S5. Disturbance (현실 외란 주입 엔진 설계)</div>
+          <p><strong>Why:</strong> 스마트 팩토리 현장에서 비전 인식을 위협하는 가혹한 센서 및 기계 환경 변수(조명 반사·번짐, 픽셀 노이즈, 기계 프레임 진동/처짐) 하에서 시스템
+            강건성 한계를 분석하기 위함이다.</p>
+          <p><strong>How:</strong> <code>disturbance.py</code>에 세 가지 독립적인 유해 외란을 구축했다.
+          <ul>
+            <li><strong>D1 (조명/반사):</strong> 광원 조사 각도를 극단화하고 Glare 반사판 객체를 동적으로 주입해 픽셀 명암을 국소적으로 훼손.</li>
+            <li><strong>D2 (센서 가우시안 노이즈):</strong> 취득된 RGB 픽셀에 가우시안 백색 노이즈(σ 최대 30)를 주입해 외곽선 해상도를 왜곡.</li>
+            <li><strong>D3 (좌표계 드리프트):</strong> 체결 진동이나 열팽창으로 카메라 지그가 서서히 틀어지는 상황을 모사하여, 사이클마다 누적 편차(최대 11.62
+              mm)만큼 카메라 좌표계를 이동시켜 오염된 측정 기준을 제공.</li>
+          </ul>
+          </p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">S6. Campaign/Experiments (자동 격자 실험 캠페인 구축)</div>
+          <p><strong>Why:</strong> 주관성과 소표본 테스트의 오류를 방지하기 위해, 전체 외란 스윕 격자에서 반복 실험을 자동 구동하여 통계적으로 신뢰할 수 있는 정량 데이터를 수집하기 위함이다.
+          </p>
+          <p><strong>How:</strong> <code>run_experiment.py</code>를 구현하여 3개 외란(D1, D2, D3) × 4개 강도 수준(OFF, weak, med,
+            strong) × 보정 가동 여부(ON, OFF) × 8회 반복으로 구성된 총 160회 격자 실험을 예외 복구(ABORT 처리) 기능과 함께 자동 구동하고,
+            <code>results.csv</code>에 누적 수집했다.</p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">S7. Analysis & Visualization (CSV 데이터 통계 및 시각화 리포트 생성)</div>
+          <p><strong>Why:</strong> 수집된 원시 CSV 데이터셋으로부터 하드코딩이나 추측 없이 수학적 정량 수치만으로 검증 보고서를 도출하여 엔지니어링적 무결성을 보증하기 위함이다.</p>
+          <p><strong>How:</strong> <code>make_figures.py</code>를 실행하여 <code>results.csv</code>를 로드·전수 집계하고, OpenCV 픽셀 렌더러 기반으로 성능
+            곡선(G1), ON/OFF 비교(G2), 산점도(G3) 등 차트 5종을 이미지로 생성해 리포트 마크다운 및 HTML에 연동, 검증을 완료했다.</p>
+        </div>
+      </section>
+
+      <!-- Section 7. Results -->
+      <section id="results">
+        <h2>7. 시뮬레이션 결과 및 한계 분석</h2>
+
+        <h3>7.1 보정 루프의 가치 (보정 ON vs OFF)</h3>
+        <p>외란이 없는 청정 환경에서 보정 루프의 작동 유무에 따른 차이는 비전 보정의 원천적 존재 가치를 입증한다.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>조건</th>
+              <th>성공률</th>
+              <th>평균 측정 잔류 오차</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>보정 OFF (대조군)</strong></td>
+              <td><span class="badge badge-danger">0%</span></td>
+              <td>9.84 mm</td>
+            </tr>
+            <tr class="warning-row">
+              <td><strong>보정 ON</strong></td>
+              <td><span class="badge badge-success">100%</span></td>
+              <td><strong>0.38 mm (26배 오차 감소)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="figure-container">
+          <img src="G3_correction_value.png" class="figure-image" alt="보정 ON/OFF 비교"
+            onerror="if(!this.src.includes('figures/')) this.src='figures/'+this.getAttribute('src');">
+          <span class="figure-caption">그림 3: 보정 유무에 따른 목표 지점 도달 시 잔류 오차 비교</span>
+        </div>
+
+        <h3>7.2 허용오차 기준의 도출 (SRS)</h3>
+        <ul>
+          <li><strong>기계적 허용 공차(Clearance):</strong> 광학 마운팅 조립체의 정렬 공차 한계 및 기계적 파손 방지를 위한 최소 허용 오차를 ±0.5 mm로 설정.</li>
+          <li><strong>GSD 측정 한계:</strong> 1280×960 상단 카메라의 픽셀 분해능은 1.4475 mm/px이다. 서브픽셀 코너 피팅을 적용하더라도 물리적 해상도 한계상 ±0.5 mm 이하의 오차 판정은 어렵다. 허용 범위를 지나치게 좁히면(예: ±0.1 mm) 노이즈로 인해 루프가 종료되지 않는다.</li>
+        </ul>
+
+        <h3>7.3 외란별 강건성 — False-Convergence (핵심 발견)</h3>
+        <p>현실 환경을 모사한 3종 외란(조명 변화, 센서 가우시안 노이즈, 기계 진동 및 열팽창으로 인한 드리프트)을 주입한 격자 실험 결과이다.</p>
+
+        <div class="figure-container">
+          <img src="G1_false_convergence.png" class="figure-image" alt="False-Convergence"
+            onerror="if(!this.src.includes('figures/')) this.src='figures/'+this.getAttribute('src');">
+          <span class="figure-caption">그림 4: 외란 인가에 따른 측정 성공률(파란색)과 실제 성공률(빨간색) 간 괴리(주황색 영역) 현상</span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>외란 종류</th>
+              <th>강도</th>
+              <th>측정 성공률</th>
+              <th>실제 성공률</th>
+              <th>성공률 괴리</th>
+              <th>해석</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>D1 조명·반사</strong></td>
+              <td>strong</td>
+              <td>100%</td>
+              <td style="color: var(--danger); font-weight: 700;">0%</td>
+              <td><span class="badge badge-danger">100%p</span></td>
+              <td>반사광으로 인한 미세한 검출 bias 발생으로 실제 오차 초과</td>
+            </tr>
+            <tr class="warning-row">
+              <td><strong>D2 카메라 노이즈</strong></td>
+              <td>strong</td>
+              <td>75%</td>
+              <td>37.5%</td>
+              <td><span class="badge badge-warning">37.5%p</span></td>
+              <td>이미지 거칠기로 검출 실패가 상승하여 제어기 지연 및 수렴 한계 도달</td>
+            </tr>
+            <tr class="alert-row">
+              <td><strong>D3 좌표 드리프트</strong></td>
+              <td>strong</td>
+              <td>100%</td>
+              <td style="color: var(--danger); font-weight: 700;">12.5%</td>
+              <td><span class="badge badge-danger">87.5%p</span></td>
+              <td>센서 부착 물리 볼트 풀림 등의 하우징 어긋남으로 인해 실제 오차 대량 누적</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>7.4 측정 잔류 vs 실제 잔류 — 괴리의 물리적 크기</h3>
+        <p>아래 차트에서 시스템 내부에서 보고하는 가짜 정렬 오차(파란색)와 외부 시뮬레이터 기준의 실제 참 오차(빨간색) 사이의 현격한 불일치를 정량적으로 확인할 수 있다.</p>
+
+        <div class="figure-container">
+          <img src="G2_residual_gap.png" class="figure-image" alt="측정 잔류 vs 실제 잔류"
+            onerror="if(!this.src.includes('figures/')) this.src='figures/'+this.getAttribute('src');">
+          <span class="figure-caption">그림 5: 비전 측정 잔류 오차(파란색)와 실제 참 잔류 오차(빨간색)의 크기 비교</span>
+        </div>
+
+        <p>드리프트(D3) 강 조건 하에서 시스템은 성공적으로 <strong>0.30 mm</strong>까지 안착했다고 "거짓 신뢰"를 하고 있으나 실제 부품은 <strong>11.62
+            mm</strong> 어긋나 있다. <strong>정밀 광학 장비 조립 공정에서 이러한 mm급의 실제 편차 방치는 제품의 품질 파괴(초점 불일치, 회절 왜곡)로 직결되는 치명적인
+            상태이다.</strong></p>
+
+        <h3>7.5 정확도-속도 트레이드오프</h3>
+        <div class="figure-container">
+          <img src="G4_tradeoff.png" class="figure-image" alt="정확도-속도 트레이드오프"
+            onerror="if(!this.src.includes('figures/')) this.src='figures/'+this.getAttribute('src');">
+          <span class="figure-caption">그림 6: 정렬 작업의 정확도와 사이클 시간 간의 트레이드오프 관계</span>
+        </div>
+
+        <p>보정 미적용 시 0.08 s 이내에 처리가 완수되어 신속성은 우수하나 정밀도가 현격히 파괴된다. 반면 보정 루프 ON 상태에서는 외란 강도가 심화될수록 반복적인 보정 연산으로 인해 평균 소요
+          시간(최대 1.07 s)이 점진적으로 지연되는 트레이드오프 특성을 보인다.</p>
+
+        <h3>7.6 한계 및 향후 과제</h3>
+        <ul>
+          <li><strong>자기 참조 한계 극복:</strong> 비전 자체 카메라 캘리브레이션 정보만으로는 카메라 캘리브레이션 픽셀-미터 변환 자체가 물리적으로 변형되는 D3 외란을 극복할 수 없다.
+            외부 마운트에 설치된 별도 고정 캘리브레이션 기준 마커(Fiducial Marker)를 이중으로 확인하여 동적 좌표 변환을 보완하는 이중 필터 설계가 요구된다.</li>
+          <li><strong>현실적인 물리 조건 도입:</strong> 부품의 물리 파지 마찰 및 미끄러짐 동역학 효과, 그리고 센서 롤링 셔터 및 모션 블러를 주입하여 Sim-to-Real 환경에 대한
+            전방위 강건화를 시도할 계획이다.</li>
+        </ul>
+
+        <h3>7.7 요약 KPI 표 (보정 ON 기준)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>외란 조건</th>
+              <th>측정 성공률</th>
+              <th>실제 성공률</th>
+              <th>평균 측정 잔류</th>
+              <th>평균 실제 잔류</th>
+              <th>평균 사이클</th>
+              <th>평균 소요 시간</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Baseline (외란 없음)</strong></td>
+              <td>100%</td>
+              <td>100%</td>
+              <td>0.38 mm</td>
+              <td>0.17 mm</td>
+              <td>3.0</td>
+              <td>0.23 s</td>
+            </tr>
+            <tr class="warning-row">
+              <td><strong>D1 조명 (strong)</strong></td>
+              <td>100%</td>
+              <td style="color: var(--danger); font-weight: 700;">0%</td>
+              <td>0.38 mm</td>
+              <td>0.61 mm</td>
+              <td>2.0</td>
+              <td>0.20 s</td>
+            </tr>
+            <tr class="warning-row">
+              <td><strong>D2 노이즈 (strong)</strong></td>
+              <td>75%</td>
+              <td>37.5%</td>
+              <td>0.50 mm</td>
+              <td>0.49 mm</td>
+              <td>5.5</td>
+              <td>1.07 s</td>
+            </tr>
+            <tr>
+              <td><strong>D3 드리프트 (weak)</strong></td>
+              <td>100%</td>
+              <td>12.5%</td>
+              <td>0.30 mm</td>
+              <td>1.80 mm</td>
+              <td>3.0</td>
+              <td>0.18 s</td>
+            </tr>
+            <tr>
+              <td><strong>D3 드리프트 (med)</strong></td>
+              <td>100%</td>
+              <td>12.5%</td>
+              <td>0.34 mm</td>
+              <td>5.69 mm</td>
+              <td>4.25</td>
+              <td>0.27 s</td>
+            </tr>
+            <tr class="alert-row">
+              <td><strong>D3 드리프트 (strong)</strong></td>
+              <td>100%</td>
+              <td style="color: var(--danger); font-weight: 700;">12.5%</td>
+              <td>0.30 mm</td>
+              <td>11.62 mm</td>
+              <td>3.5</td>
+              <td>0.21 s</td>
+            </tr>
+            <tr style="background-color: var(--bg-tertiary);">
+              <td><strong>보정 OFF (Baseline)</strong></td>
+              <td>0%</td>
+              <td>0%</td>
+              <td>9.84 mm</td>
+              <td>10.00 mm</td>
+              <td>1.0</td>
+              <td>0.08 s</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 8. Conclusion -->
+      <section id="conclusion">
+        <h2>8. 결론</h2>
+        <p>구축된 비전 기반 로봇 정렬 시스템은 baseline 환경 하에서 잔류 오차를 <strong>26배</strong> 가까이 제거하며 그 존재 당위성과 비례 제어 피드백 루프의 가치를 증명했다.
+        </p>
+        <p>그러나 물리적 외란이 결합하는 순간, <strong>"제어 루프는 오차를 0으로 감쇄시켰다고 보고하지만, 비전 왜곡에 기인하여 실제 부품은 mm 단위 이상으로 크게 이탈하는
+            False-Convergence 현상"</strong>이 관측되었다. 특히 드리프트(D3) 상황에서의 11.62 mm 오차 괴리는 비전 자기 참조 시스템의 치명적인 품질 신뢰성 리스크이다.
+        </p>
+        <p>본 설계 검증 결과는 고정밀 광학 부품 조립 자동화 라인 구축 시 <strong>내부 비전 측정값만으로 품질을 판정하는 방식의 위험성을 보여 주며, 정렬 품질 보증을 위해 외부 절대 계측 기준(예:
+            레이저 간섭계, 교차 검증용 카메라 지그)과의 다중 정합 구조 보완이 필요함</strong>을 시사한다.</p>
+      </section>
+
+      <hr>
+
+      <!-- Appendix -->
+      <section id="appendix">
+        <h2>부록: 저장소 구조 및 실행</h2>
+
+        <pre><code class="language-plaintext">/sim                boot.py · run_cycle.py · disturbance.py        (시뮬·로봇·외란)
+/external_module    interface.py · m1_pose.py · m2_align.py · scene_parts.py  (외부 비전 모듈)
+/experiments        run_experiment.py · results.csv · summary.csv · run_images/
+/report             make_figures.py · robustness_report.md · figures/
+README.md           설치 · 실행 순서 · 저장소 구조</code></pre>
+
+        <p><strong>전체 시뮬레이션 및 데이터 집계 구동 방법:</strong></p>
+        <pre><code class="language-bash">pip install -r requirements.txt          # 주요 의존성 패키지 설치
+
+# 1) 세 가지 외란 조건에 따른 전 격자 데이터 캠페인 실행
+python experiments/run_experiment.py --disturb d1 --levels off,weak,med,strong --correction both --trials 8
+python experiments/run_experiment.py --disturb d2 --levels off,weak,med,strong --correction both --trials 8
+python experiments/run_experiment.py --disturb d3 --levels off,weak,med,strong --correction both --trials 8
+
+# 2) CSV 결과 누적 및 통계 그래프, 최종 리포트 마크다운 재생성
+python report/make_figures.py</code></pre>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Back to top floating button -->
+  <div id="backToTop" class="back-to-top" title="맨 위로 이동">▲</div>
+
+  <script>
+    // Theme Toggle implementation
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const body = document.body;
+
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = body.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        body.removeAttribute('data-theme');
+        // change icon to moon
+        themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      } else {
+        body.setAttribute('data-theme', 'light');
+        // change icon to sun
+        themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      }
+    });
+
+    // Floating Back to Top Button
+    const backToTopBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // TOC Active state highlighter using Intersection Observer
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -60% 0px',
+      threshold: 0
+    };
+
+    const sections = document.querySelectorAll('section, header');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+
+</html>

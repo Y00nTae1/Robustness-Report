@@ -1,0 +1,18 @@
+# 외부 모델/가상환경(대용량·재현 가능) — 레포에 포함하지 않음
+mujoco_menagerie/
+mujoco_env/
+
+# 파이썬 캐시
+__pycache__/
+*.pyc
+*.pyo
+
+# OS/에디터
+.DS_Store
+Thumbs.db
+
+# MuJoCo 덤프
+MJMODEL.TXT
+
+# 산출 증거(results.csv, summary.csv, figures/, run_images/, disturbance_samples/,
+# *.png, *.npy, *.gif)는 평가 근거이므로 추적에 포함한다.
